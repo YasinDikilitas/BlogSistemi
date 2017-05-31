@@ -1,0 +1,16 @@
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\MyBlog.DataAccessLayer.dll.config
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\MyBlog.DataAccessLayer.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\MyBlog.DataAccessLayer.pdb
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\EntityFramework.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\FakeData.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\MyBlog.Entities.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\MyBlog.Entities.pdb
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\EntityFramework.xml
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\FakeData.pdb
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\obj\Debug\MyBlog.DataAccessLayer.csprojResolveAssemblyReference.cache
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\obj\Debug\MyBlog.DataAccessLayer.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\obj\Debug\MyBlog.DataAccessLayer.pdb
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\Blog.Common.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\Blog.Common.pdb

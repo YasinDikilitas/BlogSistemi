@@ -1,0 +1,5 @@
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\Blog.Common\bin\Debug\Blog.Common.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\Blog.Common\bin\Debug\Blog.Common.pdb
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\Blog.Common\obj\Debug\Blog.Common.csprojResolveAssemblyReference.cache
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\Blog.Common\obj\Debug\Blog.Common.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\Blog.Common\obj\Debug\Blog.Common.pdb
