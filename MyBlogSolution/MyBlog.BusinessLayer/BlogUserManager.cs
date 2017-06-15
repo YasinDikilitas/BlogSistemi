@@ -1,4 +1,5 @@
 ﻿using Blog.Common.Helpers;
+using MyBlog.BusinessLayer.Abstract;
 using MyBlog.DataAccessLayer.EntityFramework;
 using MyBlog.Entities;
 using MyBlog.Entities.Messages;
@@ -11,12 +12,11 @@ using System.Threading.Tasks;
 
 namespace MyBlog.BusinessLayer
 {
-    public class BlogUserManager
+    public class BlogUserManager : ManagerBase<BlogUser>
     {
-        private Repository<BlogUser> repo_user = new Repository<BlogUser>();
 
         public BusinessLayerResult<BlogUser> RegisterUser(RegisterViewModel data) {
-            BlogUser user = repo_user.Find(x => x.Username == data.Username || x.Email == data.Email);
+            BlogUser user =Find(x => x.Username == data.Username || x.Email == data.Email);
             BusinessLayerResult<BlogUser> layerResult = new BusinessLayerResult<BlogUser>();
 
             if (user != null)
@@ -33,19 +33,20 @@ namespace MyBlog.BusinessLayer
             }
             else
             {
-                int dbResult = repo_user.Insert(new BlogUser()
+                int dbResult = base.Insert(new BlogUser()
                 {
                     Username = data.Username,
                     Email = data.Email,
-                    Password=data.Password,
-                    ActivateGuid=Guid.NewGuid(),
+                    ProfileImageFilename = "user_boy.png",
+                    Password = data.Password,
+                    ActivateGuid = Guid.NewGuid(),
                     IsActive = false,
                     isAdmin = false
-
                 });
+
                 if (dbResult > 0)
                 {
-                    layerResult.Result = repo_user.Find(x => x.Email == data.Email && x.Username == data.Username);
+                    layerResult.Result = Find(x => x.Email == data.Email && x.Username == data.Username);
 
                     string siteUri = ConfigHelper.Get<string>("SiteRootUri");
                     string activateUri = $"{siteUri}/Home/UserActivate/{layerResult.Result.ActivateGuid}";
@@ -60,10 +61,22 @@ namespace MyBlog.BusinessLayer
             return layerResult;
         }
 
+        public BusinessLayerResult<BlogUser> GetUserById(int id)
+        {
+            BusinessLayerResult<BlogUser> res = new BusinessLayerResult<BlogUser>();
+            res.Result = Find(x => x.id == id);
+
+            if (res.Result == null)
+            {
+                res.AddError(ErrorMessageCode.UserNotFound, "Kullanıcı bulunamadı.");
+            }
+
+            return res;
+        }
         public BusinessLayerResult<BlogUser> LoginUser(LoginViewModel data)
         {
             BusinessLayerResult<BlogUser> layerResult = new BusinessLayerResult<BlogUser>();
-            layerResult.Result = repo_user.Find(x => x.Username == data.Username || x.Password == data.Password);
+            layerResult.Result = Find(x => x.Username == data.Username || x.Password == data.Password);
 
             if (layerResult.Result != null)
             {
@@ -79,11 +92,69 @@ namespace MyBlog.BusinessLayer
             }
             return layerResult;
         }
+        public BusinessLayerResult<BlogUser> UpdateProfile(BlogUser data)
+        {
+            BlogUser db_user = Find(x => x.Username == data.Username || x.Email == data.Email);
+            BusinessLayerResult<BlogUser> res = new BusinessLayerResult<BlogUser>();
 
+            if (db_user != null && db_user.id != data.id)
+            {
+                if (db_user.Username == data.Username)
+                {
+                    res.AddError(ErrorMessageCode.UsernameAlreadyExists, "Kullanıcı adı kayıtlı.");
+                }
+
+                if (db_user.Email == data.Email)
+                {
+                    res.AddError(ErrorMessageCode.EmailAlreadyExists, "E-posta adresi kayıtlı.");
+                }
+
+                return res;
+            }
+
+            res.Result = Find(x => x.id == data.id);
+            res.Result.Email = data.Email;
+            res.Result.Name = data.Name;
+            res.Result.Surname = data.Surname;
+            res.Result.Password = data.Password;
+            res.Result.Username = data.Username;
+
+            if (string.IsNullOrEmpty(data.ProfileImageFilename) == false)
+            {
+                res.Result.ProfileImageFilename = data.ProfileImageFilename;
+            }
+
+            if (Uptade(res.Result) == 0)
+            {
+                res.AddError(ErrorMessageCode.ProfileCouldNotUpdated, "Profil güncellenemedi.");
+            }
+
+            return res;
+        }
+        public BusinessLayerResult<BlogUser> RemoveUserById(int id)
+        {
+            BusinessLayerResult<BlogUser> res = new BusinessLayerResult<BlogUser>();
+            BlogUser user = Find(x => x.id == id);
+
+            if (user != null)
+            {
+                if (Delete(user) == 0)
+                {
+                    res.AddError(ErrorMessageCode.UserCouldNotRemove, "Kullanıcı silinemedi.");
+                    return res;
+                }
+            }
+            else
+            {
+                res.AddError(ErrorMessageCode.UserCouldNotFind, "Kullanıcı bulunamadı.");
+            }
+
+            return res;
+        }
         public BusinessLayerResult<BlogUser> ActivateUser(Guid activateId)
         {
             BusinessLayerResult<BlogUser> res = new BusinessLayerResult<BlogUser>();
-            res.Result = repo_user.Find(x => x.ActivateGuid == activateId);
+            res.Result = Find(x => x.ActivateGuid == activateId);
 
             if (res.Result != null)
             {
@@ -94,7 +165,7 @@ namespace MyBlog.BusinessLayer
                 }
 
                 res.Result.IsActive = true;
-                repo_user.Uptade(res.Result);
+               Uptade(res.Result);
             }
             else
             {
@@ -103,5 +174,78 @@ namespace MyBlog.BusinessLayer
 
             return res;
         }
+
+
+        public new BusinessLayerResult<BlogUser> Insert(BlogUser data)
+        {
+            BlogUser user = Find(x => x.Username == data.Username || x.Email == data.Email);
+            BusinessLayerResult<BlogUser> res = new BusinessLayerResult<BlogUser>();
+
+            res.Result = data;
+
+            if (user != null)
+            {
+                if (user.Username == data.Username)
+                {
+                    res.AddError(ErrorMessageCode.UsernameAlreadyExists, "Kullanıcı adı kayıtlı.");
+                }
+
+                if (user.Email == data.Email)
+                {
+                    res.AddError(ErrorMessageCode.EmailAlreadyExists, "E-posta adresi kayıtlı.");
+                }
+            }
+            else
+            {
+                res.Result.ProfileImageFilename = "user_boy.png";
+                res.Result.ActivateGuid = Guid.NewGuid();
+
+                if (base.Insert(res.Result) == 0)
+                {
+                    res.AddError(ErrorMessageCode.UserCouldNotInserted, "Kullanıcı eklenemedi.");
+                }
+            }
+
+            return res;
+        }
+
+        public new BusinessLayerResult<BlogUser> Update(BlogUser data)
+        {
+            BlogUser db_user = Find(x => x.Username == data.Username || x.Email == data.Email);
+            BusinessLayerResult<BlogUser> res = new BusinessLayerResult<BlogUser>();
+            res.Result = data;
+
+            if (db_user != null && db_user.id != data.id)
+            {
+                if (db_user.Username == data.Username)
+                {
+                    res.AddError(ErrorMessageCode.UsernameAlreadyExists, "Kullanıcı adı kayıtlı.");
+                }
+
+                if (db_user.Email == data.Email)
+                {
+                    res.AddError(ErrorMessageCode.EmailAlreadyExists, "E-posta adresi kayıtlı.");
+                }
+
+                return res;
+            }
+
+            res.Result = Find(x => x.id == data.id);
+            res.Result.Email = data.Email;
+            res.Result.Name = data.Name;
+            res.Result.Surname = data.Surname;
+            res.Result.Password = data.Password;
+            res.Result.Username = data.Username;
+            res.Result.IsActive = data.IsActive;
+            res.Result.isAdmin = data.isAdmin;
+
+            if (base.Update(res.Result) == 0)
+            {
+                res.AddError(ErrorMessageCode.UserCouldNotUpdated, "Kullanıcı güncellenemedi.");
+            }
+
+            return res;
+        }
+
     }
 }

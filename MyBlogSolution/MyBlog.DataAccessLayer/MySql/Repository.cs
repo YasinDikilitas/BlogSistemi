@@ -1,14 +1,15 @@
-﻿using MyBlog.DataAccessLayer.Abstract;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using MyBlog.Core.DataAccess;
 
 namespace MyBlog.DataAccessLayer.MySql
 {
-    public class Repository<T> : RepositoryBase, IRepository<T> where T : class
+    public class Repository<T> : RepositoryBase, IDataAccess<T> where T : class
     {
         public int Delete(T obj)
         {

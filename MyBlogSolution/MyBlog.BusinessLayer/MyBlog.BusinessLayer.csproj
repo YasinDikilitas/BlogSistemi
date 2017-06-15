@@ -49,17 +49,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\ManagerBase.cs" />
     <Compile Include="BlogUserManager.cs" />
     <Compile Include="BusinessLayerResult.cs" />
     <Compile Include="CategoryManager.cs" />
+    <Compile Include="CommentManager.cs" />
+    <Compile Include="LikedManager.cs" />
     <Compile Include="NoteManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Blog.Common\Blog.Common.csproj">
       <Project>{8166cc97-5dd9-4984-b01a-d33929d47063}</Project>
       <Name>Blog.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyBlog.Core\MyBlog.Core.csproj">
+      <Project>{9f720301-bccc-43c4-b567-d14920f6ae39}</Project>
+      <Name>MyBlog.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyBlog.DataAccessLayer\MyBlog.DataAccessLayer.csproj">
       <Project>{7c46ad9c-dea8-484d-9574-3e33e7623287}</Project>

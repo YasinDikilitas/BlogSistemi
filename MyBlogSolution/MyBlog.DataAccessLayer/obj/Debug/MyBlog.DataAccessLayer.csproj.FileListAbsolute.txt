@@ -14,3 +14,5 @@ C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataA
 C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\obj\Debug\MyBlog.DataAccessLayer.pdb
 C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\Blog.Common.dll
 C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\Blog.Common.pdb
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\MyBlog.Core.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.DataAccessLayer\bin\Debug\MyBlog.Core.pdb

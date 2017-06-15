@@ -2,6 +2,9 @@
 using MyBlog.Entities;
 using MyBlog.Entities.Messages;
 using MyBlog.Entities.ValueObjects;
+using MyBlog.WebApp.Filters;
+using MyBlog.WebApp.Models;
+using MyBlog.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +14,15 @@ using System.Web.Mvc;
 
 namespace MyBlog.WebApp.Controllers
 {
+    [Exc]
     public class HomeController : Controller
     {
+        BlogUserManager blogusermanager = new BlogUserManager();
+        NoteManager noteManager = new NoteManager();
         // GET: Home
         public ActionResult Index()
         {
-            NoteManager nm = new NoteManager();
-            return View(nm.GetAllNote().OrderByDescending(x=>x.ModifyDate).ToList()); 
+            return View(noteManager.ListQueryable().Where(x => x.IsDraft == "false").OrderByDescending(x => x.ModifyDate).ToList());
         }
         
               // GET: Category
@@ -27,20 +32,16 @@ namespace MyBlog.WebApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            List<Note> notes = noteManager.ListQueryable().Where(
+                x => x.IsDraft == "false" && x.CategoryId == id).OrderByDescending(
+                x => x.ModifyDate).ToList();
 
-            CategoryManager cm = new CategoryManager();
-            Category cat = cm.GetCategoryById(id.Value);
-            if (cat == null)
-            {
-                return HttpNotFound();
-            }
-            return View("Index",cat.Notes.OrderByDescending(x=>x.ModifyDate).ToList());
+            return View("Index", notes);
         }
 
         public ActionResult MostLiked()
         {
-            NoteManager nm = new NoteManager();
-            return View("Index",nm.GetAllNote().OrderByDescending(x => x.LikeCount).ToList());
+            return View("Index", noteManager.ListQueryable().OrderByDescending(x => x.LikeCount).ToList());
         }
 
         public ActionResult About()
@@ -81,47 +82,62 @@ namespace MyBlog.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                BlogUserManager bum = new BlogUserManager();
-                BusinessLayerResult<BlogUser> res = bum.RegisterUser(model);
-                if (res.Errors.Count>0)
+                BusinessLayerResult<BlogUser> res = blogusermanager.RegisterUser(model);
+
+                if (res.Errors.Count > 0)
                 {
                     res.Errors.ForEach(x => ModelState.AddModelError("", x.Message));
                     return View(model);
                 }
-             /*BlogUser user = null;
-                try
-                {
-                    user = bum.RegisterUser(model);
-                }
-                catch(Exception ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
 
-                */
-                /*     if (model.Username == "aaa")
-                     {
-                         ModelState.AddModelError("", "Kullanıcı adı kullanılıyor.");
-                     }
-                     if (model.Email == "aaa@aa.com")
-                     {
-                         ModelState.AddModelError("", "Email adresi kullanılıyor.");
-                     }
-                     foreach(var item in ModelState)
-                     {
-                         if (item.Value.Errors.Count > 0)
-                         {
-                             return View(model);
-                         }
-                     }*/
 
-              /*  if (user == null)
+                //EvernoteUser user = null;
+
+                //try
+                //{
+                //    user = eum.RegisterUser(model);
+                //}
+                //catch (Exception ex)
+                //{
+                //    ModelState.AddModelError("", ex.Message);   
+                //}
+
+
+
+                //if (model.Username == "aaa")
+                //{
+                //    ModelState.AddModelError("", "Kullanıcı adı kullanılıyor.");
+                //}
+
+                //if(model.EMail == "aaa@aa.com")
+                //{
+                //    ModelState.AddModelError("", "E-posta adresi kullanılıyor.");
+                //}
+
+                //foreach (var item in ModelState)
+                //{
+                //    if(item.Value.Errors.Count > 0)
+                //    {
+                //        return View(model);
+                //    }
+                //}
+
+                //if (user == null)
+                //{
+                //    return View(model);
+                //}
+
+                OkViewModel notifyObj = new OkViewModel()
                 {
-                    return View(model);
-                }
-                */
-                return RedirectToAction("RegisterOk");
+                    Title = "Kayıt Başarılı",
+                    RedirectingUrl = "/Home/Login",
+                };
+
+                notifyObj.Items.Add("Lütfen e-posta adresinize gönderdiğimiz aktivasyon link'ine tıklayarak hesabınızı aktive ediniz. Hesabınızı aktive etmeden not ekleyemez ve beğenme yapamazsınız.");
+
+                return View("Ok", notifyObj);
             }
+
             return View(model);
         }
         public ActionResult Logout()
@@ -132,20 +148,31 @@ namespace MyBlog.WebApp.Controllers
 
         public ActionResult ActivateUser(Guid id)
         {
-            BlogUserManager bom = new BlogUserManager();
-            BusinessLayerResult<BlogUser> res = bom.ActivateUser(id);
+            BusinessLayerResult<BlogUser> res = blogusermanager.ActivateUser(id);
+
             if (res.Errors.Count > 0)
             {
-                TempData["errors"] = res.Errors;
-                return RedirectToAction("ActivateUserCancel");
+                ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                {
+                    Title = "Geçersiz İşlem",
+                    Items = res.Errors
+                };
+
+                return View("Error", errorNotifyObj);
             }
-            return RedirectToAction("ActivateUserOk");
+
+            OkViewModel okNotifyObj = new OkViewModel()
+            {
+                Title = "Hesap Aktifleştirildi",
+                RedirectingUrl = "/Home/Login"
+            };
+
+            okNotifyObj.Items.Add("Hesabınız aktifleştirildi. Artık not paylaşabilir ve beğenme yapabilirsiniz.");
+
+            return View("Ok", okNotifyObj);
         }
 
-        public ActionResult ActivateUserOk()
-        {
-            return View();
-        }
+
 
         public ActionResult ActivateUserCancel()
         {
@@ -157,9 +184,119 @@ namespace MyBlog.WebApp.Controllers
             return View(errors);
         }
 
-        public ActionResult RegisterOk()
+        [Auth]
+        public ActionResult ShowProfile()
+        {
+            BusinessLayerResult<BlogUser> res =
+                blogusermanager.GetUserById(CurrentSession.User.id);
+
+            if (res.Errors.Count > 0)
+            {
+                ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                {
+                    Title = "Hata Oluştu",
+                    Items = res.Errors
+                };
+
+                return View("Error", errorNotifyObj);
+            }
+
+            return View(res.Result);
+        }
+
+        public ActionResult EditProfile()
+        {
+            BusinessLayerResult<BlogUser> res = blogusermanager.GetUserById(CurrentSession.User.id);
+
+            if (res.Errors.Count > 0)
+            {
+                ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                {
+                    Title = "Hata Oluştu",
+                    Items = res.Errors
+                };
+
+                return View("Error", errorNotifyObj);
+            }
+
+            return View(res.Result);
+        }
+           [Auth]
+        [HttpPost]
+        public ActionResult EditProfile(BlogUser model, HttpPostedFileBase ProfileImage)
+        {
+            ModelState.Remove("ModifiedUser");
+
+            if (ModelState.IsValid)
+            {
+                if (ProfileImage != null &&
+                    (ProfileImage.ContentType == "image/jpeg" ||
+                    ProfileImage.ContentType == "image/jpg" ||
+                    ProfileImage.ContentType == "image/png"))
+                {
+                    string filename = $"user_{model.id}.{ProfileImage.ContentType.Split('/')[1]}";
+
+                    ProfileImage.SaveAs(Server.MapPath($"~/images/{filename}"));
+                    model.ProfileImageFilename = filename;
+                }
+
+                BusinessLayerResult<BlogUser> res = blogusermanager.UpdateProfile(model);
+
+                if (res.Errors.Count > 0)
+                {
+                    ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                    {
+                        Items = res.Errors,
+                        Title = "Profil Güncellenemedi.",
+                        RedirectingUrl = "/Home/EditProfile"
+                    };
+
+                    return View("Error", errorNotifyObj);
+                }
+
+                // Profil güncellendiği için session güncellendi.
+                CurrentSession.Set<BlogUser>("login", res.Result);
+
+                return RedirectToAction("ShowProfile");
+            }
+
+            return View(model);
+        }
+
+        [Auth]
+        public ActionResult DeleteProfile()
+        {
+            BusinessLayerResult<BlogUser> res =
+                blogusermanager.RemoveUserById(CurrentSession.User.id);
+
+            if (res.Errors.Count > 0)
+            {
+                ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                {
+                    Items = res.Errors,
+                    Title = "Profil Silinemedi.",
+                    RedirectingUrl = "/Home/ShowProfile"
+                };
+
+                return View("Error", errorNotifyObj);
+            }
+
+            Session.Clear();
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult AccessDenied()
         {
             return View();
         }
+
+
+        public ActionResult HasError()
+        {
+            return View();
+        }
+
+
     }
-    }
+}

@@ -1,5 +1,6 @@
 ﻿using Blog.Common;
 using MyBlog.Entities;
+using MyBlog.WebApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,12 @@ namespace MyBlog.WebApp.Init
     {
         public string GetUsername()
         {
-            if (HttpContext.Current.Session["login"] != null)
-            {
-                BlogUser user = HttpContext.Current.Session["login"] as BlogUser;
-                return user.Username;
+            BlogUser user = CurrentSession.User;
 
-            }
-            return "system";
+            if (user != null)
+                return user.Username;
+            else
+                return "system";
         }
     }
 }

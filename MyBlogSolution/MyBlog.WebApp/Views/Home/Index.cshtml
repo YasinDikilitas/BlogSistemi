@@ -42,44 +42,44 @@
             <div class="row">
                 @foreach (Note note in Model)
                 {
-                    <div class="col-sm-4 col-lg-4 col-md-4">
+                    <div class="col-sm-4 col-lg-4 col-md-4" data-note-id="@note.id">
                         <div class="thumbnail">
                             <img src="http://placehold.it/320x150" alt="@note.Title">
                             <div class="caption">
                                 <h4>
-                                    <a href="#">@note.Title</a>
+                                    <a href="#" data-toggle="modal" data-target="#modal_notedetail" data-note-id="@note.id">
+                                        @note.Title
+                                    </a>
                                 </h4>
                                 <h6 class="text-right">
-                                    @note.ModifyDate.ToString("dd.MM.YY HH:mm")<span class="glyphicon glyphicon-time"></span><br />
-                                    @note.Owner.Username<span class="glyphicon glyphicon-user"></span>
+                                    @note.Owner.Username <span class="glyphicon glyphicon-user"></span><br />
+                                    @note.ModifyDate.ToString("dd.MM.yy HH:mm") <span class="glyphicon glyphicon-time"></span>
                                 </h6>
-                                <p>
-                                  @if(string.IsNullOrEmpty(note.Text)==false && note.Text.Length >50)
-                                  {
-                                      <p>@(note.Text.Substring(0, 50) + "...")</p>
-                                      <p class="pull-right">
-                                          <a href="#" class="btn btn-default btn-sm">devamı<span class="glyphicon glyphicon-chevron-right"></span></a>
-                                      </p>
-                                  }
-                                  else
-                                  {
-                                      <p>@note.Text</p>
-                                  }
-                                </p>
-                               
+                                @if (string.IsNullOrEmpty(note.Text) == false && note.Text.Length > 70)
+                                {
+                                    <p>@(note.Text.Substring(0, 70) + "...")</p>
+                                    <p class="pull-right">
+                                        <a href="#" data-toggle="modal" data-target="#modal_notedetail" data-note-id="@note.id" class="btn btn-default btn-sm">devamı <span class="glyphicon glyphicon-chevron-right"></span></a>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p>@note.Text</p>
+                                }
                             </div>
                             <div>
                                 <hr />
                             </div>
                             <div class="ratings">
                                 <p class="pull-right">
-                                    <button class="btn btn-default btn-sm">
+                                    <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal_comment" data-note-id="@note.id">
                                         <span class="glyphicon glyphicon-comment"></span> Yorumlar
                                     </button>
                                 </p>
                                 <p>
-                                    <button class="btn btn-default btn-sm" type="button">
-                                        <span class="glyphicon glyphicon-star"></span>@note.LikeCount
+                                    <button class="btn btn-default btn-sm" type="button" data-liked="false" data-note-id="@note.id">
+                                        <span class="glyphicon glyphicon-star-empty like-star"></span>&nbsp;
+                                        <span class="like-count">@note.LikeCount</span>
                                     </button>
                                 </p>
                             </div>
@@ -92,3 +92,12 @@
     </div>
 </div>
 
+@section footer{
+    @Html.Partial("_PartialFooter")
+}
+
+@Bootstrap.ModalPopup(id: "modal_comment", title: "Yorumlar")
+@Bootstrap.ModalPopup(id: "modal_notedetail", title: "Not Detayı")
+<script src="~/Scripts/comment.js"></script>
+<script src="~/Scripts/like.js"></script>
+<script src="~/Scripts/NoteDetailPopup.js"></script>

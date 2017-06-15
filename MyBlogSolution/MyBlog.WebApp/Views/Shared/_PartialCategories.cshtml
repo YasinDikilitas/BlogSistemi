@@ -1,9 +1,10 @@
 ﻿@using MyBlog.BusinessLayer
 @using MyBlog.Entities
+@using MyBlog.WebApp.Models
 
 @{ 
-    CategoryManager cm = new CategoryManager();
-    List<Category> list = cm.GetCategories();
+    
+        List<Category> list = CacheHelper.GetCategoriesFromCache();
 
 }
 <p class="lead">Kategoriler</p>

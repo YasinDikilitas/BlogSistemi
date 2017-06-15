@@ -16,3 +16,5 @@ C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.Busin
 C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.BusinessLayer\bin\Debug\FakeData.pdb
 C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.BusinessLayer\bin\Debug\Blog.Common.dll
 C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.BusinessLayer\bin\Debug\Blog.Common.pdb
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.BusinessLayer\bin\Debug\MyBlog.Core.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.BusinessLayer\bin\Debug\MyBlog.Core.pdb

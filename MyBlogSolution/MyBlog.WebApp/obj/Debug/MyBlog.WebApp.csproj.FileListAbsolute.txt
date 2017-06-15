@@ -45,3 +45,7 @@ C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.WebAp
 C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.WebApp\bin\FakeData.pdb
 C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.WebApp\bin\Blog.Common.dll
 C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.WebApp\bin\Blog.Common.pdb
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.WebApp\bin\WebMatrix.Data.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.WebApp\bin\MyBlog.Core.dll
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.WebApp\bin\WebMatrix.Data.xml
+C:\Users\Yasin\documents\visual studio 2015\Projects\MyBlogSolution\MyBlog.WebApp\bin\MyBlog.Core.pdb

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -11,9 +12,12 @@ namespace MyBlog.Entities
     [Table("Categories")]
    public class Category:MyEntitiyBase
     {
-        [Required,StringLength(50)]
+        [DisplayName("Kategori"),
+         Required(ErrorMessage = "{0} alanı gereklidir."),
+         StringLength(50, ErrorMessage = "{0} alanı max. {1} karakter içermeli.")]
         public string Title { get; set; }
-        [StringLength(200)]
+        [DisplayName("Açıklama"),
+               StringLength(200, ErrorMessage = "{0} alanı max. {1} karakter içermeli.")]
         public string Description { get; set; }
 
         public virtual List<Note> Notes { get; set; }

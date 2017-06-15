@@ -18,11 +18,11 @@
                     @Html.ValidationSummary(false)
                     <div class="input-group ">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
-                        @Html.TextAreaFor(model => model.Username, new { @class = "form-control", placeholder = "Kullanıcı Adınız" })
+                        @Html.TextBoxFor(model => model.Username, new { @class = "form-control", placeholder = "Kullanıcı Adınız" })
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></span>
-                        @Html.TextAreaFor(model => model.Password, new { @class = "form-control", placeholder = "Şifreniz",type="password" })
+                        @Html.TextBoxFor(model => model.Password, new { @class = "form-control", placeholder = "Şifreniz",type="password" })
                     </div>
 
 
@@ -36,10 +36,4 @@
         </div>
     </section>
 }
-
-<script>
-    $(function () {
-        $("footer").parent().hide();
-    });
-</script>
 

@@ -53,7 +53,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\IRepository.cs" />
     <Compile Include="EntityFramework\DatabaseContext.cs" />
     <Compile Include="EntityFramework\Repository.cs" />
     <Compile Include="EntityFramework\RepositoryBase.cs" />
@@ -71,10 +70,17 @@
       <Project>{8166cc97-5dd9-4984-b01a-d33929d47063}</Project>
       <Name>Blog.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MyBlog.Core\MyBlog.Core.csproj">
+      <Project>{9f720301-bccc-43c4-b567-d14920f6ae39}</Project>
+      <Name>MyBlog.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MyBlog.Entities\MyBlog.Entities.csproj">
       <Project>{b9051a03-2874-43b5-93d7-9c17087c806d}</Project>
       <Name>MyBlog.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Abstract\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

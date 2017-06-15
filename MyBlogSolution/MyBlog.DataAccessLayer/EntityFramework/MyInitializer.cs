@@ -23,6 +23,7 @@ namespace MyBlog.DataAccessLayer.EntityFramework
                 IsActive = true,
                 isAdmin = true,
                 Username = "YasinDikilitas",
+                ProfileImageFilename = "user.png",
                 Password = "123456",
                 CreatedOn = DateTime.Now,
                 ModifyDate = DateTime.Now.AddMinutes(5),
@@ -40,6 +41,7 @@ namespace MyBlog.DataAccessLayer.EntityFramework
                 isAdmin = false,
                 Username = "YilmazDikilitas",
                 Password = "123456",
+                ProfileImageFilename = "user.png",
                 CreatedOn = DateTime.Now,
                 ModifyDate = DateTime.Now.AddMinutes(5),
                 ModifiedUser = "YasinDikilitas"
@@ -59,6 +61,7 @@ namespace MyBlog.DataAccessLayer.EntityFramework
                     isAdmin = false,
                     Username = $"user{u}",
                     Password = "123456",
+                    ProfileImageFilename = "user.png",
                     CreatedOn = FakeData.DateTimeData.GetDatetime(DateTime.Now.AddYears(-1), DateTime.Now),
                     ModifyDate = FakeData.DateTimeData.GetDatetime(DateTime.Now.AddYears(-1), DateTime.Now),
                     ModifiedUser = $"user{u}"
